@@ -111,6 +111,6 @@ let jwt_client
     }
   })
 
-  await app.start(8080)
+  await app.start(8000)
   console.log('Bolt app is running!')
 })()
