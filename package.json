@@ -1,0 +1,23 @@
+{
+  "name": "concierge",
+  "version": "1.0.0",
+  "description": "A simple slack app that sends out a poll to rate our concierge services.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vacuumlabs/concierge-service-poll.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -- index.js",
+    "deploy-now": "now && now alias concierge.vacuumlabs.com"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "@slack/bolt": "^1.5.0",
+    "googleapis": "^39.2.0"
+  }
+}
