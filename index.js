@@ -1,12 +1,14 @@
 const {App} = require('@slack/bolt')
 const {google} = require('googleapis')
-const poll_select = require('./blocks.js')
+const {poll_select,poll_thank_you} = require('./blocks.js')
 const google_secret = require('./google_secret.json')
-const slack_secret = require('./slack_secret.json')
 
 let polls_in_progress = {}
 
-const app = new App(slack_secret)
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+})
 
 app.command('/concierge', async ({ack, payload, context}) => {
   ack()
@@ -109,6 +111,6 @@ let jwt_client
     }
   })
 
-  await app.start(3000)
+  await app.start(8080)
   console.log('Bolt app is running!')
 })()

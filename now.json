@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "name": "concierge",
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@now/node"
+    }
+  ],
+  "env": {
+    "SLACK_BOT_TOKEN": "@slack-bot-token",
+    "SLACK_SIGNING_SECRET": "@slack-signing-secret"
+  }
+}
