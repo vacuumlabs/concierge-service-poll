@@ -16,5 +16,5 @@ app.post('/', async (req, res) => {
     text: 'ahoj',
   })
 })
-app.listen(3000)
+app.listen(8000)
 console.log('app started')
