@@ -1,6 +1,8 @@
 {
   "version": 1,
   "name": "concierge",
+  "type": "npm",
+  "alias": "concierge.vacuumlabs.com",
   "env": {
     "CONCIERGE_BOT_TOKEN": "@concierge-bot-token",
     "CONCIERGE_SIGNING_SECRET": "@concierge-signing-secret"
