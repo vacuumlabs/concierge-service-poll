@@ -1,12 +1,6 @@
 {
-  "version": 2,
+  "version": 1,
   "name": "concierge",
-  "builds": [
-    {
-      "src": "index.js",
-      "use": "@now/node"
-    }
-  ],
   "env": {
     "CONCIERGE_BOT_TOKEN": "@concierge-bot-token",
     "CONCIERGE_SIGNING_SECRET": "@concierge-signing-secret"
