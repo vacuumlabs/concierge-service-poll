@@ -69,4 +69,7 @@ const poll_thank_you = [
   },
 ]
 
-exports.poll_select = poll_select
+module.exports = {
+  poll_select,
+  poll_thank_you,
+}

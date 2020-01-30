@@ -8,7 +8,7 @@
     }
   ],
   "env": {
-    "SLACK_BOT_TOKEN": "@slack-bot-token",
-    "SLACK_SIGNING_SECRET": "@slack-signing-secret"
+    "CONCIERGE_BOT_TOKEN": "@concierge-bot-token",
+    "CONCIERGE_SIGNING_SECRET": "@concierge-signing-secret"
   }
 }

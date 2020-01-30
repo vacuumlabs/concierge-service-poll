@@ -1,13 +1,17 @@
 const {App} = require('@slack/bolt')
 const {google} = require('googleapis')
-const {poll_select,poll_thank_you} = require('./blocks.js')
+const {poll_select, poll_thank_you} = require('./blocks.js')
 const google_secret = require('./google_secret.json')
 
 let polls_in_progress = {}
 
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  token: process.env.CONCIERGE_BOT_TOKEN,
+  signingSecret: process.env.CONCIERGE_SIGNING_SECRET,
+  endpoints: {
+    events: '/',
+    commands: '/',
+  },
 })
 
 app.command('/concierge', async ({ack, payload, context}) => {
@@ -98,19 +102,16 @@ function put_response_in_table(name, satisfaction) {
 }
 
 let jwt_client
-;(async () => {
-  jwt_client = new google.auth.JWT(google_secret.client_email, null, google_secret.private_key, [
-    'https://www.googleapis.com/auth/spreadsheets',
-  ])
+jwt_client = new google.auth.JWT(google_secret.client_email, null, google_secret.private_key, [
+  'https://www.googleapis.com/auth/spreadsheets',
+])
 
-  jwt_client.authorize(function(error, tokens) {
-    if (error) {
-      console.log(error)
-    } else {
-      console.log('Successfully connected to google!')
-    }
-  })
-
-  await app.start(8000)
-  console.log('Bolt app is running!')
-})()
+jwt_client.authorize(function(error, tokens) {
+  if (error) {
+    console.log(error)
+  } else {
+    console.log('Successfully connected to google!')
+  }
+})
+app.start(3000)
+console.log('Bolt app is running!')
