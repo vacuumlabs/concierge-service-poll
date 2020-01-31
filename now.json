@@ -3,6 +3,12 @@
   "name": "concierge",
   "type": "npm",
   "alias": "concierge.vacuumlabs.com",
+  "scale": {
+    "bru1": {
+      "min": 1,
+      "max": 1
+    }
+  },
   "env": {
     "CONCIERGE_BOT_TOKEN": "@concierge-bot-token",
     "CONCIERGE_SIGNING_SECRET": "@concierge-signing-secret"
