@@ -59,56 +59,85 @@ const poll_select = (message) => [
       type: 'mrkdwn',
       text: message,
     },
+  },
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: 'I would rather do it myself next time',
+    },
     accessory: {
-      type: 'static_select',
-      placeholder: {
+      type: 'button',
+      text: {
         type: 'plain_text',
-        text: 'Select an item',
-        emoji: true,
+        text: '1',
       },
-      options: [
-        {
-          text: {
-            type: 'plain_text',
-            text: '1: I would rather do it myself next time',
-            emoji: true,
-          },
-          value: '1',
-        },
-        {
-          text: {
-            type: 'plain_text',
-            text: '2: I really hope for some progress next time',
-            emoji: true,
-          },
-          value: '2',
-        },
-        {
-          text: {
-            type: 'plain_text',
-            text: '3: Neither satisfied nor dissatisfied',
-            emoji: true,
-          },
-          value: '3',
-        },
-        {
-          text: {
-            type: 'plain_text',
-            text: '4: Everything went well except few small hesitations',
-            emoji: true,
-          },
-          value: '4',
-        },
-        {
-          text: {
-            type: 'plain_text',
-            text: '5: I cannot complain about anything',
-            emoji: true,
-          },
-          value: '5',
-        },
-      ],
-      action_id: 'submit',
+      value: '1',
+      action_id: 'submit_1',
+    },
+  },
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: 'I really hope for some progress next time',
+    },
+    accessory: {
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: '2',
+      },
+      value: '2',
+      action_id: 'submit_2',
+    },
+  },
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: 'Neither satisfied nor dissatisfied',
+    },
+    accessory: {
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: '3',
+      },
+      value: '3',
+      action_id: 'submit_3',
+    },
+  },
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: 'Everything went well except few small hesitations',
+    },
+    accessory: {
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: '4',
+      },
+      value: '4',
+      action_id: 'submit_4',
+    },
+  },
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: 'Great work, I cannot complain about anything',
+    },
+    accessory: {
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: '5',
+      },
+      value: '5',
+      action_id: 'submit_5',
     },
   },
 ]

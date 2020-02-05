@@ -79,28 +79,26 @@ app.view('message_modal', async ({ack, body, view, context}) => {
   }
 })
 
-app.action('submit', async ({ack, body, context}) => {
+const handle_submit = async ({ack, body, context}) => {
   ack()
   const poll = polls_in_progress[body.user.id]
-  put_response_in_table(poll.target_user_name, body.actions[0].selected_option.value)
-  try {
-    await app.client.chat.update({
-      token: context.botToken,
-      ts: body.message.ts,
-      channel: body.channel.id,
-      blocks: poll_thank_you,
-      text: 'Thank you for your time!',
-    })
-    await app.client.chat.update({
-      token: context.botToken,
-      ts: poll.progress_msg_ts,
-      channel: poll.progress_msg_channel,
-      text: `${poll.target_user_name} has completed the poll.`,
-    })
-  } catch (error) {
-    console.error(error)
-  }
-})
+  put_response_in_table(poll.target_user_name, body.actions[0].value)
+  await app.client.chat.update({
+    token: context.botToken,
+    ts: body.message.ts,
+    channel: body.channel.id,
+    blocks: poll_thank_you,
+    text: 'Thank you for your time!',
+  })
+  await app.client.chat.update({
+    token: context.botToken,
+    ts: poll.progress_msg_ts,
+    channel: poll.progress_msg_channel,
+    text: `${poll.target_user_name} has completed the poll.`,
+  })
+}
+
+for (let i = 1; i <= 5; ++i) app.action(`submit_${i}`, handle_submit)
 
 function put_response_in_table(name, satisfaction) {
   const sheets = google.sheets({version: 'v4'})
