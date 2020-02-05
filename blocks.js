@@ -40,8 +40,10 @@ const message_modal = (user_id) => ({
         type: 'plain_text_input',
         action_id: 'text',
         multiline: true,
-        initial_value:
-          'Hi! As we still want to improve our concierge services, please give us feedback and rate completing of your last request: ',
+        placeholder: {
+          type: 'plain_text',
+          text: intro_text,
+        },
       },
       label: {
         type: 'plain_text',
@@ -51,6 +53,8 @@ const message_modal = (user_id) => ({
     },
   ],
 })
+const intro_text =
+  'Hi! As we still want to improve our concierge services, please give us feedback and rate completing of your last request: '
 
 const poll_select = (message) => [
   {
@@ -154,6 +158,7 @@ const poll_thank_you = [
 
 module.exports = {
   message_modal,
+  intro_text,
   poll_select,
   poll_thank_you,
 }
