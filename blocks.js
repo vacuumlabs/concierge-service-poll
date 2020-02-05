@@ -1,9 +1,63 @@
-const poll_select = [
+const message_modal = (user_id) => ({
+  type: 'modal',
+  callback_id: 'message_modal',
+  title: {
+    type: 'plain_text',
+    text: 'Concierge service poll',
+    emoji: true,
+  },
+  submit: {
+    type: 'plain_text',
+    text: 'Submit',
+    emoji: true,
+  },
+  close: {
+    type: 'plain_text',
+    text: 'Cancel',
+    emoji: true,
+  },
+  blocks: [
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: 'To:',
+      },
+      accessory: {
+        type: 'users_select',
+        action_id: 'select_user',
+        placeholder: {
+          type: 'plain_text',
+          text: 'select a user',
+        },
+        initial_user: user_id,
+      },
+    },
+    {
+      type: 'input',
+      block_id: 'message',
+      element: {
+        type: 'plain_text_input',
+        action_id: 'text',
+        multiline: true,
+        initial_value:
+          'Hi! As we still want to improve our concierge services, please give us feedback and rate completing of your last request: ',
+      },
+      label: {
+        type: 'plain_text',
+        text: 'Message',
+        emoji: true,
+      },
+    },
+  ],
+})
+
+const poll_select = (message) => [
   {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: 'Hi! As we still want to improve our concierge services, please give us feedback and rate completing of your last request.',
+      text: message,
     },
     accessory: {
       type: 'static_select',
@@ -70,6 +124,7 @@ const poll_thank_you = [
 ]
 
 module.exports = {
+  message_modal,
   poll_select,
   poll_thank_you,
 }

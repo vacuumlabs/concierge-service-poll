@@ -1,8 +1,6 @@
 const {App} = require('@slack/bolt')
 const {google} = require('googleapis')
-const {poll_select, poll_thank_you} = require('./blocks.js')
-
-let polls_in_progress = {}
+const {message_modal, poll_select, poll_thank_you} = require('./blocks.js')
 
 const jwt_client = new google.auth.JWT(
   'concierge@concierge-1580124434121.iam.gserviceaccount.com',
@@ -20,52 +18,64 @@ jwt_client.authorize(function(error, tokens) {
 
 const app = new App({
   token: process.env.CONCIERGE_BOT_TOKEN,
-  signingSecret: process.env.CONCIERGE_SIGNING_SECRET
+  signingSecret: process.env.CONCIERGE_SIGNING_SECRET,
 })
 app.start(process.env.PORT || 3000)
 console.log('App is running!')
 
+let polls_in_progress = {}
+let target_user_id = undefined
+
 app.command('/concierge', async ({ack, payload, context}) => {
   ack()
   const sender_user_id = payload.user_id
-  const send_status = async (message) => {
-    const result = await app.client.chat.postMessage({
-      token: context.botToken,
-      channel: sender_user_id,
-      text: message,
-    })
-    return result
+
+  if (payload.text) {
+    const user_id_match = payload.text.match(/^<@([^|]*)(\|.+)?>$/)
+    if (!user_id_match) {
+      await app.client.chat.postMessage({
+        token: context.botToken,
+        channel: sender_user_id,
+        text: `${payload.text} doesn't look like a user name`,
+      })
+      return
+    }
+    target_user_id = user_id_match[1]
   }
 
-  if (!payload.text) {
-    await send_status('Usage: /concierge @user_name')
-    return
-  }
-  const user_id_match = payload.text.match(/^<@([^|]*)(\|.+)?>$/)
-  if (!user_id_match) {
-    await send_status(`${payload.text} doesn't look like a user name`)
-    return
-  }
-  const target_user_id = user_id_match[1]
-  try {
-    await app.client.chat.postMessage({
-      token: context.botToken,
-      channel: target_user_id,
-      blocks: poll_select,
-      text: 'How were you satisfied with the concierge services?',
-    })
-    const target_user = await app.client.users.info({
-      token: context.botToken,
-      user: target_user_id,
-    })
-    const result = await send_status(`Poll sent to ${target_user.user.real_name}.`)
-    polls_in_progress[target_user_id] = {
-      target_user_name: target_user.user.real_name,
-      progress_msg_channel: result.channel,
-      progress_msg_ts: result.message.ts,
-    }
-  } catch (error) {
-    console.error(error)
+  await app.client.views.open({
+    token: context.botToken,
+    trigger_id: payload.trigger_id,
+    view: message_modal(target_user_id),
+  })
+})
+
+app.action('select_user', async ({ack, body}) => {
+  ack()
+  target_user_id = body.actions[0].selected_user
+})
+
+app.view('message_modal', async ({ack, body, view, context}) => {
+  ack()
+  await app.client.chat.postMessage({
+    token: context.botToken,
+    channel: target_user_id,
+    blocks: poll_select(view.state.values.message.text.value),
+    text: 'How were you satisfied with the concierge services?',
+  })
+  const target_user = await app.client.users.info({
+    token: context.botToken,
+    user: target_user_id,
+  })
+  const result = await app.client.chat.postMessage({
+    token: context.botToken,
+    channel: body.user.id,
+    text: `Poll sent to ${target_user.user.real_name}.`,
+  })
+  polls_in_progress[target_user_id] = {
+    target_user_name: target_user.user.real_name,
+    progress_msg_channel: result.channel,
+    progress_msg_ts: result.message.ts,
   }
 })
 
@@ -79,7 +89,7 @@ app.action('submit', async ({ack, body, context}) => {
       ts: body.message.ts,
       channel: body.channel.id,
       blocks: poll_thank_you,
-      text: 'Thank you!',
+      text: 'Thank you for your time!',
     })
     await app.client.chat.update({
       token: context.botToken,
